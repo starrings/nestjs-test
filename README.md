@@ -1,2 +1,1 @@
-# nestjs-test
-nestJS 테스트
+NestJS로 배우는 백엔드 프로그래밍 학습중
