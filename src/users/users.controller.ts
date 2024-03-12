@@ -15,20 +15,17 @@ export class UsersController {
   }
 
   @Post('/email-verify')
-  async verifyEmail(@Query() verifyEmailDto: VerifyEmailDto): Promise<string> {
-    console.log(verifyEmailDto);  
-    return;
+  async verifyEmail(@Query() verifyEmailDto: VerifyEmailDto) {
+    return await this.userService.verifyEmail(verifyEmailDto);
   }
 
   @Post('login')
-  async login(@Body() userLoginDto: UserLoginDto): Promise<string> {
-    console.log(userLoginDto);
-    return;
+  async login(@Body() userLoginDto: UserLoginDto) {
+    return await this.userService.login(userLoginDto);
   }
 
   @Get('/:id')
   async getUser(@Param('id') userId: string): Promise<UserDto> {
-    console.log(userId);
-    return;
+    return await this.userService.getUser(userId);
   }
 }
