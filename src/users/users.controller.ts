@@ -11,6 +11,8 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<void> {
+    console.log(createUserDto);
+
     await this.userService.createUser(createUserDto);
   }
 
@@ -19,13 +21,13 @@ export class UsersController {
     return await this.userService.verifyEmail(verifyEmailDto);
   }
 
-  @Post('login')
+  @Post('/login')
   async login(@Body() userLoginDto: UserLoginDto) {
     return await this.userService.login(userLoginDto);
   }
 
   @Get('/:id')
-  async getUser(@Param('id') userId: string): Promise<UserDto> {
+  async getUser(@Param('id') userId: string) {
     return await this.userService.getUser(userId);
   }
 }

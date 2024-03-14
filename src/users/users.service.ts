@@ -31,7 +31,7 @@ export class UsersService {
     throw new Error('Method not implemented.');
   }
 
-  async getUser(userId: number) {
+  async getUser(userId: string) {
     // db에서 확인
     // 응답
     throw new Error('Method not implemented.');
