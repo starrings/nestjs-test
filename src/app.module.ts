@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ConfigModule.forRoot({
       envFilePath: [`.${process.env.NODE_ENV}.env`],
       load: [emailConfig],
+
       isGlobal: true,
       validationSchema,
     }),
