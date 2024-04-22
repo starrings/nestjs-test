@@ -1,17 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as uuid from 'uuid';
 import { EmailService } from 'src/email/email.service';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/users/entity/user.entity';
+import { DataSource, Repository } from 'typeorm';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class UsersService {
-  constructor(private emailService: EmailService) {};
+  constructor(
+    private emailService: EmailService,
+    @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
+    private dataSource: DataSource,
+  ) {};
   
   async createUser(createUserDto: CreateUserDto) {
     const { name, email, password } = createUserDto;
-    await this.checkUserExistsByEmail(email);
+    const userExist = await this.checkUserExistsByEmail(email);
+    if (userExist) {
+      throw new UnprocessableEntityException('해당 이메일로는 가입할 수 없습니다.');
+    }
     const signupVerifyToken = uuid.v1();  
 
     await this.saveUser(name, email, password, signupVerifyToken);
@@ -37,14 +48,22 @@ export class UsersService {
     throw new Error('Method not implemented.');
   }
 
-  private checkUserExistsByEmail(email: string) {
-    // DB 연동
-    return false;
+  private async checkUserExistsByEmail(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email: email }
+    });
+
+    return user !== undefined;
   }
 
-  private saveUser(name: string, email: string, password: string, signupVerifyToken: string) {
-    // DB 연동
-    return;
+   private async saveUser(name: string, email: string, password: string, signupVerifyToken: string) {
+    const user = new UserEntity();
+    user.id = ulid();
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    user.signupVerifyToken = signupVerifyToken;
+    await this.usersRepository.save(user);
   }
 
   private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
