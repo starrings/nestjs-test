@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Inject, Injectable, Logger, LoggerService, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as uuid from 'uuid';
 import { EmailService } from 'src/email/email.service';
@@ -17,6 +17,7 @@ export class UsersService {
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
     private dataSource: DataSource,
     private authService: AuthService,
+    @Inject(Logger) private readonly logger: LoggerService,
   ) {};
   
   async createUser(createUserDto: CreateUserDto) {
@@ -58,6 +59,7 @@ export class UsersService {
     });
 
     if (!user) {
+      this.logger.warn('유저가 존재하지 않습니다.')
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 

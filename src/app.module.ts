@@ -28,7 +28,7 @@ import authConfig from './config/authConfig';
       migrationsRun: false,
       migrations: [__dirname + '/**/migrations/*.js'],
       migrationsTableName: 'migrations',
-    })
+    }),
   ],
   controllers: [],
   providers: [],
