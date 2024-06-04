@@ -6,16 +6,25 @@ import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreateUserCommand } from './command/user-create.command';
+import { GetUserQuery } from './query/get-user.query';
 
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService, private authService: AuthService) {}
+  constructor(
+    private userService: UsersService,
+    private authService: AuthService,
+    private commandBus: CommandBus,
+    private queryBus: QueryBus,
+  ) {}
 
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<void> {
-    console.log(createUserDto);
+    const command = new CreateUserCommand(createUserDto);
 
-    await this.userService.createUser(createUserDto);
+    return this.commandBus.execute(command);
+    // await this.userService.createUser(createUserDto);
   }
 
   @Get('/email-verify')
@@ -31,6 +40,8 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get('/:id')
   async getUser(@Param('id') userId: string) {
-    return await this.userService.getUser(userId);
+    const getUserInfoQuery = new GetUserQuery(userId);
+    
+    return this.queryBus.execute(getUserInfoQuery);
   }
 }
