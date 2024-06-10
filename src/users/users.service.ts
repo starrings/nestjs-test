@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger, LoggerService, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './interface/dto/create-user.dto';
 import * as uuid from 'uuid';
 import { EmailService } from 'src/email/email.service';
-import { VerifyEmailDto } from './dto/verify-email.dto';
-import { UserLoginDto } from './dto/user-login.dto';
+import { VerifyEmailDto } from './interface/dto/verify-email.dto';
+import { UserLoginDto } from './interface/dto/user-login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/users/entity/user.entity';
+import { UserEntity } from 'src/users/infra/db/entity/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { ulid } from 'ulid';
 import { AuthService } from 'src/auth/auth.service';

@@ -3,12 +3,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserDto } from './dto/user.dto';
-import { UsersService } from './users.service';
+import { UsersService } from '../users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './command/user-create.command';
-import { GetUserQuery } from './query/get-user.query';
+import { CreateUserCommand } from '../application/command/user-create.command';
+import { GetUserQuery } from '../application/query/get-user.query';
 
 @Controller('users')
 export class UsersController {
